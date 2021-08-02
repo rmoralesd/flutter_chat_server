@@ -88,10 +88,29 @@ const login = async(req, res = response) => {
 }
 
 const renewToken = async(req, res = response) => {
-    res.json({
-        ok: true,
-        uid: req.uid
-    });
+
+    const uid = req.uid;
+
+    try {
+
+        const usuarioDB = await Usuario.findById(uid);
+
+        const token = await generarJWT(uid);
+
+        res.json({
+            ok: true,
+            usuarioDB,
+            token
+        });
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Hable con el administrador'
+        });
+    }
 }
 
 module.exports = {
