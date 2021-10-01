@@ -1,3 +1,4 @@
+const { comprobarJWT } = require('../helpers/jwt');
 const { io } = require('../index');
 
 
@@ -5,7 +6,11 @@ const { io } = require('../index');
 io.on('connection', client => {
     console.log('Cliente conectado');
 
-    //client.emit('active-bands', bands.getBands());
+    const [valido, uid] = comprobarJWT(client.handshake.headers['x-token']);
+
+    if (!valido) {
+        return client.disconnect();
+    }
 
     client.on('disconnect', () => {
         console.log('Cliente desconectado');
