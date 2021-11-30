@@ -13,7 +13,20 @@ io.on('connection', client => {
         return client.disconnect();
     }
 
+    //Cliente autenticado
     usuarioConectado(uid);
+
+    //Ingresar al usuario a una sala en particular
+    //Hay dos salas => sala global y sala privada client.id
+    //Se va a crear otra sala con el uuid de la persona.
+    client.join(uid);
+
+    //Escuchar del cliente el mensaje-personal
+    client.on('mensaje-personal', (payload) => {
+        console.log(payload);
+        io.onconnection(payload.para).emit('mensaje-personal', payload);
+    });
+
 
     client.on('disconnect', () => {
         //console.log('Cliente desconectado');
