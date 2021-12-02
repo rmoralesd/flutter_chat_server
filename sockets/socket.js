@@ -25,7 +25,7 @@ io.on('connection', client => {
     client.on('mensaje-personal', async(payload) => {
         await grabarMensaje(payload);
         console.log(payload);
-        io.onconnection(payload.para).emit('mensaje-personal', payload);
+        io.to(payload.para).emit('mensaje-personal', payload);
     });
 
 
